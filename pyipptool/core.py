@@ -1,21 +1,3 @@
-import functools
-import logging
-import os
-import plistlib
-import shutil
-import subprocess
-import tempfile
-import time
-import threading
-
-from future import standard_library
-from future.builtins import bytes, str
-from future.utils import PY3
-with standard_library.hooks():
-    import urllib.parse
-
-import colander
-
 from .forms import (cancel_job_form,
                     release_job_form,
                     create_job_form,
@@ -45,6 +27,23 @@ from .forms import (cancel_job_form,
                     release_held_new_jobs_form,
                     cancel_subscription_form,
                     )
+import colander
+import functools
+import logging
+import os
+import plistlib
+import shutil
+import subprocess
+import tempfile
+import time
+import threading
+
+from future import standard_library
+from future.builtins import bytes, str
+from future.utils import PY3
+with standard_library.hooks():
+    import urllib.parse
+
 
 try:
     from tornado.gen import coroutine, Return, Task
@@ -149,7 +148,7 @@ class MetaAsyncShifter(type):
     """
     def __new__(cls, name, bases, attrs):
         klass = super(MetaAsyncShifter, cls).__new__(cls, name, bases, attrs)
-        if attrs.get('async'):
+        if attrs.get('doasync'):
             # ASYNC Wrapper
             for method_name in dir(bases[0]):
                 method = getattr(bases[0], method_name)
@@ -161,7 +160,7 @@ class MetaAsyncShifter(type):
 
 
 class IPPToolWrapper(object, metaclass=MetaAsyncShifter):
-    async = False
+    doasync = False
 
     def __init__(self, config):
         self.config = config
@@ -861,7 +860,7 @@ class IPPToolWrapper(object, metaclass=MetaAsyncShifter):
 
 
 class AsyncIPPToolWrapper(IPPToolWrapper):
-    async = True
+    doasync = True
 
     def __init__(self, config, io_loop):
         self.config = config
