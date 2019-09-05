@@ -160,8 +160,7 @@ class MetaAsyncShifter(type):
         return klass
 
 
-class IPPToolWrapper(object):
-    __metaclass__ = MetaAsyncShifter
+class IPPToolWrapper(object, metaclass=MetaAsyncShifter):
     async = False
 
     def __init__(self, config):

@@ -5,3 +5,5 @@ dist/
 *.pyc
 .coverage
 .cache/
+/.project
+/.pydevproject
